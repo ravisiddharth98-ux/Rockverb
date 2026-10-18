@@ -1,5 +1,5 @@
 
-name: Rockverb Windows Build
+name: Rockverb Windows VST3 Build
 
 on:
   workflow_dispatch:
@@ -11,14 +11,21 @@ jobs:
     runs-on: windows-2022
 
     steps:
-      - name: Checkout project
+      - name: Checkout Rockverb
         uses: actions/checkout@v4
 
-      - name: Check repository
-        shell: pwsh
-        run: |
-          Write-Host "Rockverb repository connected."
-          Write-Host "A real plugin build requires the Rockverb source code and compatible JUCE setup."
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
 
-      - name: Build status
-        run: echo "Build runner works, but the VST3 has not been built yet."
+      - name: Configure project
+        run: cmake -S . -B build -A x64
+
+      - name: Build VST3
+        run: cmake --build build --config Release --target Rockverb_VST3
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rockverb-Windows-x64-VST3
+          path: build/Rockverb_artefacts/Release/VST3/
+          if-no-files-found: error
