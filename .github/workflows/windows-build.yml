@@ -1,0 +1,24 @@
+
+name: Rockverb Windows Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Check repository
+        shell: pwsh
+        run: |
+          Write-Host "Rockverb repository connected."
+          Write-Host "A real plugin build requires the Rockverb source code and compatible JUCE setup."
+
+      - name: Build status
+        run: echo "Build runner works, but the VST3 has not been built yet."
